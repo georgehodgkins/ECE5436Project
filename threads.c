@@ -1,23 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* XDCtools Header files */
-#include <xdc/std.h>
-#include <xdc/runtime/System.h>
-#include <xdc/runtime/Diags.h>
-#include <xdc/runtime/Log.h>
 #include "utils.h"
 #include "commands.h"
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/knl/Task.h>
-#include <ti/sysbios/knl/Swi.h>
-#include <xdc/cfg/global.h> // needed to get the global from the .cfg file
+ // needed to get the global from the .cfg file
 
 /* BIOS Header files */
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/knl/Task.h>
-#include <ti/sysbios/knl/Semaphore.h>
-#include <ti/devices/msp432p4xx/driverlib/gpio.h>
+
 
 /**
  * This function was a keep-alive function but it was from the example code,

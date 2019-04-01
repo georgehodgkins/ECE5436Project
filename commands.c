@@ -2,11 +2,6 @@
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <ti/drivers/ADC.h>
-#include <ti/drivers/PWM.h>
-#include <ti/drivers/Timer.h>
-#include <xdc/cfg/global.h> // needed to get the global from the .cfg file
-#include <ti/sysbios/knl/Semaphore.h>
 
 void commandsInit() {
     // create and initialize command queue fifo

@@ -1,21 +1,14 @@
 // define which board we are using so the gpio package doesn't break everything
 #define __MSP432P401R__
 
-#include <ti/drivers/UART.h>
+
 #include <stdlib.h>
 #include "utils.h"
-#include <ti/drivers/UART.h>
-#include <ti/devices/msp432p4xx/driverlib/gpio.h>
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include "os.h"
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include <ti/drivers/ADC.h>
-#include <ti/drivers/adc/ADCMSP432.h>
-#include <ti/drivers/PWM.h>
-#include <ti/sysbios/knl/Semaphore.h>
-#include <xdc/cfg/global.h> // needed to get the global from the .cfg file
-#include <ti/sysbios/knl/Swi.h>
+
 
 /* Example/Board Header files */
 #include "Board.h"

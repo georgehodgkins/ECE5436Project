@@ -51,7 +51,7 @@
 //  - ADC14->rCTL0.b.bSSEL  = ADC14SSEL__ACLK >> ADC14SSEL_OFS;
 //
 // File creation date: 2015-01-20
-//
+// CMSIS defs start at 2753
 //****************************************************************************
 
 #ifndef __MSP432P401R_H__

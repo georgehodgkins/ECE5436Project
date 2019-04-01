@@ -1,12 +1,6 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#include <ti/drivers/UART.h>
-#include <ti/drivers/ADC.h>
-#include <ti/drivers/PWM.h>
-#include <ti/drivers/Timer.h>
-#include <ti/sysbios/knl/Semaphore.h>
-
 // define which board we are using so the gpio package doesn't break everything
 #define __MSP432P401R__
 

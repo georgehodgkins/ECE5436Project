@@ -441,6 +441,11 @@
               <FileType>5</FileType>
               <FilePath>.\utils.h</FilePath>
             </File>
+            <File>
+              <FileName>configurePin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\configurePin.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
