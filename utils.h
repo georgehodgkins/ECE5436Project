@@ -68,9 +68,6 @@ extern int length(char*);
 extern void putChar(char);
 extern void putString(char*);
 extern void getChar(char*);
-extern void pinToggle(int port, int pin);
-extern void pinOff(int port, int pin);
-extern void pinOn(int port, int pin);
 extern void registerCommand(void (*function)(void), char command[COMMANDLENGTH + 1]);
 extern int resolveCommand(char command[COMMANDLENGTH + 1]);
 extern void runCommand(int);
@@ -84,5 +81,6 @@ extern void PWMInit();
 extern void peidiDC();
 extern void setDuty(int pwm, int period);
 extern void printTime(void);
+extern void BSP_Clock_InitFastest (void);
 
 #endif /* UTILS_H_ */

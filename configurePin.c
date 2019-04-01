@@ -1,10 +1,7 @@
 #include <stdint.h>
 #include "configurePin.h"
 
-//This function configures a pin
-//inputs: enum inputs (defined in header) are self-explanatory, pinN is the pin number (0-16 for letter ports)
-//afsel selects the alternate function with bits 0 and 1, corresponding to function select regs 0 & 1
-void configurePin(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
+inline uint16_t* portAddr(enum PortLetterType portL) {
 	uint16_t offset;
 	switch (portL) {
 		case(A):
@@ -26,6 +23,46 @@ void configurePin(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum D
 	//addr is the base address of the port
 	uint16_t* addr = (uint16_t*) 0x40004C00;
 	addr += offset;
+	return addr;
+}
+	
+inline enum PortLetterType NumToLetterPort(uint8_t portN, uint8_t* pinN) {
+	enum PortLetterType portL;
+	switch (portN) {
+		case 2:
+		*pinN += 8;
+		case 1:
+		portL = A;
+		break;
+		case 4:
+		*pinN += 8;
+		case 3:
+		portL = B;
+		break;
+		case 6:
+		*pinN += 8;
+		case 5:
+		portL = C;
+		break;
+		case 8:
+		*pinN += 8;
+		case 7:
+		portL = D;
+		break;
+		case 10:
+		*pinN += 8;
+		case 9:
+		portL = E;
+		break;
+	}
+	return portL;
+}
+
+//This function configures a pin
+//inputs: enum inputs (defined in header) are self-explanatory, pinN is the pin number (0-16 for letter ports)
+//afsel selects the alternate function with bits 0 and 1, corresponding to function select regs 0 & 1
+void configurePinL(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
+	uint16_t* addr = portAddr(portL);
 	//direction reg is at +0x04
 	if (dir == IN) {
 		*(addr+ 0x04) &= ~(0x1 << pinN);
@@ -52,39 +89,40 @@ void configurePin(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum D
 
 //inputs to this function are the same, except first argument is a port number instead of a letter
 //and obv pinN can only be 0-8
-void configurePinbyNum (uint8_t portN, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
-	switch (portN) {
-		//odd-numbered ports are low side of the corresponding letter, even is high side
-		case 1:
-		configurePin(A, pinN, afsel, dir, interrupt);
-		break;
-		case 2:
-		configurePin(A, pinN+8, afsel, dir, interrupt);
-		break;
-		case 3:
-		configurePin(B, pinN, afsel, dir, interrupt);
-		break;
-		case 4:
-		configurePin(B, pinN+8, afsel, dir, interrupt);
-		break;
-		case 5:
-		configurePin(C, pinN, afsel, dir, interrupt);
-		break;
-		case 6:
-		configurePin(C, pinN+8, afsel, dir, interrupt);
-		break;
-		case 7:
-		configurePin(D, pinN, afsel, dir, interrupt);
-		break;
-		case 8:
-		configurePin(D, pinN+8, afsel, dir, interrupt);
-		break;
-		case 9:
-		configurePin(E, pinN, afsel, dir, interrupt);
-		break;
-		case 10:
-		configurePin(E, pinN+8, afsel, dir, interrupt);
-		break;
-	}
+void configurePin (uint8_t portN, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
+	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
+	configurePin(portL, pinN, afsel, dir, interrupt);
 }
-		
+
+void pinOffL(enum PortLetterType portL, uint8_t pinN) {
+	uint16_t* addr = portAddr(portL);
+	//output reg is +0x02
+	*(addr + 0x02) &= ~(0x1 << pinN);
+}
+
+void pinOff(int portN, uint8_t pinN) {
+	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
+	pinOff(portN, pinN);
+}
+
+void pinOnL(enum PortLetterType portL, uint8_t pinN) {
+	uint16_t* addr = portAddr(portL);
+	//output reg is +0x02
+	*(addr + 0x02) |= 0x1 << pinN;
+}
+
+void pinOn(int portN, uint8_t pinN) {
+	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
+	pinOffL(portL, pinN);
+}
+
+void pinToggleL(enum PortLetterType portL, uint8_t pinN) {
+	uint16_t* addr = portAddr(portL);
+	//output reg is +0x02
+	*(addr + 0x02) ^= 0x1 << pinN;
+}
+
+void pinToggle(int portN, uint8_t pinN) {
+	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
+	pinToggleL(portL, pinN);
+}

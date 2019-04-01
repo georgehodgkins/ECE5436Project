@@ -3,7 +3,7 @@
 
 #include "utils.h"
 #include "commands.h"
- // needed to get the global from the .cfg file
+
 
 /* BIOS Header files */
 
