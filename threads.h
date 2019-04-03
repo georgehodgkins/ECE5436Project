@@ -11,4 +11,4 @@ extern void calculatePid(void);
 extern void LightSensor(void);
 extern void printQueues(void);
 
-#endif /* UTILS_H_ */
+#endif /* THREADS_H_ */
