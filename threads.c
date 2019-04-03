@@ -9,6 +9,7 @@
 
 /* BIOS Header files */
 
+extern Queue *commandQueue;
 
 /**
  * This function was a keep-alive function but it was from the example code,

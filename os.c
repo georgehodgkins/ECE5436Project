@@ -22,6 +22,7 @@ uint8_t nextT, nextPT;//counters for defining new threads/periodic threads up to
 int32_t Stacks[NUMTHREADS][STACKSIZE];//static allocation for thread stacks
 int32_t *sig0, *sig1;//semaphores to be signalled periodically
 int32_t *buttonSig;//semaphore to be signalled on button press
+int32_t printSema;
 
 
 // ******** OS_Init ************
@@ -35,6 +36,7 @@ void OS_Init(void){
   BSP_Clock_InitFastest();// set processor clock to fastest speed
 	OS_FIFO_Init();
 	nextT = 0;
+	printSema = 0;
 	nextPT = 0;
 }
 

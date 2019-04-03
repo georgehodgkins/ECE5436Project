@@ -20,4 +20,8 @@ void pinOn(int portN, uint8_t pinN);
 void pinToggleL(enum PortLetterType portL, uint8_t pinN);
 
 void pinToggle(int portN, uint8_t pinN);
+
+uint16_t* portAddr(enum PortLetterType portL);
+	
+enum PortLetterType NumToLetterPort(uint8_t portN, uint8_t* pinN);
 #endif

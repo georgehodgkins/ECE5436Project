@@ -8,16 +8,16 @@ inline uint16_t* portAddr(enum PortLetterType portL) {
 		offset =  0x0;
 		break;
 		case (B):
-		offset =  0x20;
+		offset =  0x10;
 		break;
 		case (C):
-		offset = 0x40;
+		offset = 0x20;
 		break;
 		case (D):
-		offset = 0x60;
+		offset = 0x30;
 		break;
 		case (E):
-		offset = 0x80;
+		offset = 0x40;
 		break;
 	}
 	//addr is the base address of the port
@@ -65,25 +65,25 @@ void configurePinL(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum 
 	uint16_t* addr = portAddr(portL);
 	//direction reg is at +0x04
 	if (dir == _IN) {
-		*(addr+ 0x04) &= ~(0x1 << pinN);
+		*(addr+ 0x02) &= ~(0x1 << pinN);
 		//set PUR or PDR?
 	} else { //dir == OUT
-		*(addr + 0x04) |= 0x1 << pinN;
+		*(addr + 0x02) |= 0x1 << pinN;
 	}
 	//function select regs are at + 0x0A, 0x0C
-	*(addr + 0x0A) |= (afsel & 0x1) << pinN;
-	*(addr + 0x0C) |= (afsel & 0x2) << pinN;
+	*(addr + 0x05) |= (afsel & 0x1) << pinN;
+	*(addr + 0x06) |= (afsel & 0x2) << pinN;
 	//interrupt enable reg is at +0x1A
 	//interrupt edge select reg is at +0x18
 	if (interrupt == NO_INTERRUPT) {
-		*(addr + 0x1A) &= ~(0x1 << pinN);
+		*(addr + 0x0D) &= ~(0x1 << pinN);
 	} else {
 		if (interrupt == INTERRUPT_RISING) {
-			*(addr + 0x18) &= ~(0x1 << pinN);
+			*(addr + 0x0C) &= ~(0x1 << pinN);
 		} else { //INTERRUPT_FALLING
-			*(addr + 0x18) |= 0x1 << pinN;
+			*(addr + 0x0C) |= 0x1 << pinN;
 		}
-		*(addr + 0x1A) |= 0x1 << pinN;
+		*(addr + 0x0D) |= 0x1 << pinN;
 	}
 }
 
@@ -91,35 +91,35 @@ void configurePinL(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum 
 //and obv pinN can only be 0-8
 void configurePin (uint8_t portN, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
 	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
-	configurePin(portL, pinN, afsel, dir, interrupt);
+	configurePinL(portL, pinN, afsel, dir, interrupt);
 }
 
 void pinOffL(enum PortLetterType portL, uint8_t pinN) {
 	uint16_t* addr = portAddr(portL);
 	//output reg is +0x02
-	*(addr + 0x02) &= ~(0x1 << pinN);
+	*(addr + 0x01) &= ~(0x1 << pinN);
 }
 
 void pinOff(int portN, uint8_t pinN) {
 	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
-	pinOff(portN, pinN);
+	pinOffL(portL, pinN);
 }
 
 void pinOnL(enum PortLetterType portL, uint8_t pinN) {
 	uint16_t* addr = portAddr(portL);
 	//output reg is +0x02
-	*(addr + 0x02) |= 0x1 << pinN;
+	*(addr + 0x01) |= 0x1 << pinN;
 }
 
 void pinOn(int portN, uint8_t pinN) {
 	enum PortLetterType portL = NumToLetterPort(portN, &pinN);
-	pinOffL(portL, pinN);
+	pinOnL(portL, pinN);
 }
 
 void pinToggleL(enum PortLetterType portL, uint8_t pinN) {
 	uint16_t* addr = portAddr(portL);
 	//output reg is +0x02
-	*(addr + 0x02) ^= 0x1 << pinN;
+	*(addr + 0x01) ^= 0x1 << pinN;
 }
 
 void pinToggle(int portN, uint8_t pinN) {

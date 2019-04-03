@@ -16,6 +16,15 @@
 /* Example/Board Header files */
 #include "Board.h"
 
+//ping-pong queues
+uint8_t queueNum;
+uint8_t queueAddress[2];
+int queue[2][20];
+
+commandListener *baseCommand;
+
+Queue *commandQueue;
+
 /**
  * Set up GPIO pins needed for the team 6 robot
  *
@@ -128,10 +137,10 @@ void PWMInit() {
  * @return void
  */
 void UARTInit() {
-		configurePin(2,2,1,_IN,NO_INTERRUPT); // Pin 2.2 to RX
-		configurePin(2,3,1,_OUT,NO_INTERRUPT); // Pin 2.3 to TX
+		configurePin(3,2,1,_IN,NO_INTERRUPT); // Pin 3.2 to RX
+		configurePin(3,3,1,_OUT,NO_INTERRUPT); // Pin 3.3 to TX
 		
-		UCA1CTLW0 = 0x0001; // hold logic
+		UCA2CTLW0 = 0x0001; // hold logic
 		
 		// bit15=0,      no parity bits
 		// bit14=x,      not used when parity is disabled
@@ -147,14 +156,14 @@ void UARTInit() {
 		// bit1=0,       do not transmit break (not used here)
 		// bit0=1,       hold logic in reset state while configuring
 		
-		UCA1CTLW0 = 0x00C1;	// set control
+		UCA2CTLW0 = 0x00C1;	// set control
 		
 		//Use to determine Buad settings ->>> http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html//
-		UCA1BRW = 26;	//assume CLK=3Mhz and BaudRate=115200 (CLK specified in startup)
-		UCA0MCTLW &= ~0xFFF1;
+		UCA2BRW = 26;	//assume CLK=3Mhz and BaudRate=115200 (CLK specified in startup)
+		UCA2MCTLW &= ~0xFFF1;
 		
-		UCA1IE &= ~0x000F; // disable interrupts
-		UCA1CTLW0 &= ~0x0001; // resume logic
+		UCA2IE &= ~0x000F; // disable interrupts
+		UCA2CTLW0 &= ~0x0001; // resume logic
 		
 }
 
@@ -182,8 +191,9 @@ int length(char *a) {
  * @return void
  */
 void putChar(char a) {
-    while((UCA1IFG&0x0002)!=1) {} //Wait for TXBUF to be empty
-		UCA1TXBUF = a;
+    while((UCA2IFG&0x0002)==0) {} //Wait for TXBUF to be empty
+		UCA2TXBUF = a;
+		UCA2IFG &= ~0002;
 }
 
 /**
@@ -206,8 +216,9 @@ void putString(char *a) {
  * @return char - return char from UART RXBuffer
  */
 char getChar() {
-    while((UCA1IFG&0x0001)!=1) {} //Wait for RXBUF to be full
-		return ((char)UCA1RXBUF);
+    while((UCA2IFG&0x0001)==0) {} //Wait for RXBUF to be full
+		UCA2IFG &= ~0001;
+		return ((char)UCA2RXBUF);
 }
 
 /**

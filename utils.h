@@ -1,5 +1,5 @@
 #ifndef UTILS_H_
-#define UTILS_H_
+#define UTILS_H_ 1
 #include <stdint.h>
 
 #define COMMANDLENGTH     10
@@ -10,6 +10,8 @@
 
 
 //PID stuff
+//needs to be moved into the .c
+/*
 int left;
 int right;
 int P;
@@ -21,12 +23,7 @@ int ki;
 int print;
 int front;
 int lF;
-uint8_t two;
-
-//ping-pong queues
-uint8_t queueNum;
-uint8_t queueAddress[2];
-int queue[2][20];
+uint8_t two;*/
 
 // FIFO int queue struct
 typedef struct queue {
@@ -42,10 +39,6 @@ typedef struct commandListener { // command listener struct
     struct commandListener *next; // linked list structure
     char command[COMMANDLENGTH+1]; // command string
 } commandListener;
-
-commandListener *baseCommand;
-
-Queue *commandQueue;
 
 extern int equals(char*, char*);
 extern int length(char*);

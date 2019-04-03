@@ -57,8 +57,6 @@ struct mailbox {
 };
 typedef struct mailbox mailType;
 
-int32_t printSema = 0;
-
 // ******** OS_Init ************
 // Initialize operating system, disable interrupts
 // Initialize OS controlled I/O: periodic interrupt, bus clock as fast as possible

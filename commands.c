@@ -4,6 +4,9 @@
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
+extern int32_t printSema;
+typedef struct queue Queue;
+extern Queue *commandQueue;
 
 void commandsInit() {
     // create and initialize command queue fifo
@@ -13,6 +16,8 @@ void commandsInit() {
     registerCommand(&red, "red");
     registerCommand(&green, "green");
     registerCommand(&blue, "blue");
+	//FIXME
+	/*
     registerCommand(&ADC, "adc");
     registerCommand(&start, "start");
     registerCommand(&stop, "stop");
@@ -22,6 +27,7 @@ void commandsInit() {
     registerCommand(&high, "high");
     registerCommand(&spinl, "spinl");
     registerCommand(&spinr, "spinr");
+	*/
 }
 
 void printSem() {
