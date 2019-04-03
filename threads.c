@@ -80,7 +80,7 @@ void bluetooth(UArg arg0, UArg arg1) {    // get commands from bluetooth UART
         i = -1;                           // set to -1 to make the do while loop work better
         putString("\r\n");
         do {
-            getChar(&input);              // read input
+            input = getChar();              // read input
             putChar(input);               // print input (uart doesn't do that by default)
             if(input == '\b' && i >= 0) { // if input is backspace, move string position back 1 (-2 + 1) to allow it to overwrite the last character inputted
                 putString(" \b");         // put a space in place of the last character so it actually goes away then backspace again so the cursor is in the right spot

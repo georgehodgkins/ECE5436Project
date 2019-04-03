@@ -391,6 +391,97 @@ void printTime(void) {
     putString(a);
 }
 
+**
+ * Initialize UART for the team 6 robot
+ *
+ * @param none
+ * @return void
+ */
+void UARTInit() {
+		/*
+    // uart initialization
+    UART_Params uartParams;
+    uart = NULL;
+	//REWRITE
+    // Create a UART with data processing off.
+	
+    UART_Params_init(&uartParams);
+    uartParams.writeDataMode = UART_DATA_BINARY;
+    uartParams.readDataMode = UART_DATA_BINARY;
+    uartParams.readReturnMode = UART_RETURN_FULL;
+    uartParams.readEcho = UART_ECHO_OFF;
+    uartParams.baudRate = 115200;
+
+    // sets global uart variable
+    do {
+        uart = UART_open(Board_UART1, &uartParams); // set to uart0 for usb or uart1 for bluetooth (helpful for setting the system up)
+    } while(uart == NULL);
+		*/
+		configurePin(2,2,1,IN,NO_INTERRUPT) // Pin 2.2 to RX
+		configurePin(2,3,1,OUT,NO_INTERRUPT) // Pin 2.3 to TX
+		
+		UCA1CTLW0 = 0x0001; // hold logic
+		
+		// bit15=0,      no parity bits
+		// bit14=x,      not used when parity is disabled
+		// bit13=0,      LSB first
+		// bit12=0,      8-bit data length
+		// bit11=0,      1 stop bit
+		// bits10-8=000, asynchronous UART mode
+		// bits7-6=11,   clock source to SMCLK
+		// bit5=0,       reject erroneous characters and do not set flag
+		// bit4=0,       do not set flag for break characters
+		// bit3=0,       not dormant
+		// bit2=0,       transmit data, not address (not used here)
+		// bit1=0,       do not transmit break (not used here)
+		// bit0=1,       hold logic in reset state while configuring
+		
+		UCA1CTLW0 = 0x00C1;	// set control
+		
+		//Use to determine Buad settings ->>> http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html//
+		UCA1BRW = 26;	//assume CLK=3Mhz and BaudRate=115200 (CLK specified in startup)
+		UCA0MCTLW &= ~0xFFF1;
+		
+		UCA1IE &= ~0x000F; // disable interrupts
+		UCA1CTLW0 &= ~0x0001; // resume logic
+		
+}
+
+/**
+ * Function to simplify writing to the UART, allows us to easily write one character.
+ *
+ * @param a - character to be written
+ * @return void
+ */
+void putChar(char a) {
+    while((UCA1IFG&0x0002)!=1) {} //Wait for TXBUF to be empty
+		UCA1TXBUF = a;
+}
+
+/**
+ * Function to simplify writing to the UART, allows us to easily write a full string.
+ *
+ * @param a - pointer to string being written to UART
+ * @return void
+ */
+void putString(char *a) {
+	 while(*a != '\0') {
+		 putChar(*a);
+		 a++;
+	 }
+}
+
+/**
+ * Function to allow us to easily read one character from the UART
+ *
+ * @param void
+ * @return char - return char from UART RXBuffer
+ */
+char getChar() {
+    while((UCA1IFG&0x0001)!=1) {} //Wait for RXBUF to be full
+		return ((char)UCA1RXBUF);
+}
+
 /**
 	* Clock initializer fcn taken from Valvano's BSP
 	*

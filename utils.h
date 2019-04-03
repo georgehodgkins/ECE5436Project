@@ -66,7 +66,7 @@ extern int equals(char*, char*);
 extern int length(char*);
 extern void putChar(char);
 extern void putString(char*);
-extern void getChar(char*);
+extern char getChar(void);
 extern void registerCommand(void (*function)(void), char command[COMMANDLENGTH + 1]);
 extern int resolveCommand(char command[COMMANDLENGTH + 1]);
 extern void runCommand(int);
