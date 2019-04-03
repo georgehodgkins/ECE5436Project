@@ -30,7 +30,6 @@ int right;
 int P;
 int I;
 int lastE;
-int D;
 int kp;
 int kd;
 int ki;
