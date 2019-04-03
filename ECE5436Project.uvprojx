@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -412,39 +413,14 @@
               <FilePath>.\utils.c</FilePath>
             </File>
             <File>
-              <FileName>Board.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Board.h</FilePath>
-            </File>
-            <File>
-              <FileName>commands.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\commands.h</FilePath>
-            </File>
-            <File>
-              <FileName>MSP_EXP432P401R.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\MSP_EXP432P401R.h</FilePath>
-            </File>
-            <File>
-              <FileName>msp432p401r.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\msp432p401r.h</FilePath>
-            </File>
-            <File>
-              <FileName>os.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\os.h</FilePath>
-            </File>
-            <File>
-              <FileName>utils.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\utils.h</FilePath>
-            </File>
-            <File>
               <FileName>configurePin.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\configurePin.c</FilePath>
+            </File>
+            <File>
+              <FileName>CortexM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CortexM.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "configurePin.h"
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,7 +23,7 @@ void commandsInit() {
     registerCommand(&spinr, "spinr");
 }
 
-void printSem() {
+void printSem() {//REWRITE
     Semaphore_post(printSema);
 }
 
@@ -70,10 +71,12 @@ void start() {
     setDuty(0, left);
     setDuty(1, right);
     runTime = 0;
+	//rewrite
     Timer_start(PIDTimer);
 }
 
 void stop() {
+	//rewrite
     Timer_stop(PIDTimer);
     setDuty(0, 0);
     setDuty(1, 0);
