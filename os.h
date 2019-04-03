@@ -24,10 +24,10 @@
  http://users.ece.utexas.edu/~valvano/
  */
 
-
+#include <stdint.h>
 #ifndef __OS_H
 #define __OS_H  1
-#define NUMTHREADS  8// maximum number of threads
+#define NUMTHREADS  2// maximum number of threads
 #define NUMPTHREADS 2//max number of periodic threads
 #define FSIZE 10 //FIFO size
 #define STACKSIZE   96      // number of 32-bit words in stack per thread
@@ -57,6 +57,7 @@ struct mailbox {
 };
 typedef struct mailbox mailType;
 
+int32_t printSema = 0;
 
 // ******** OS_Init ************
 // Initialize operating system, disable interrupts

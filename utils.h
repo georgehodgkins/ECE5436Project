@@ -1,8 +1,6 @@
 #ifndef UTILS_H_
 #define UTILS_H_
-
-// define which board we are using so the gpio package doesn't break everything
-#define __MSP432P401R__
+#include <stdint.h>
 
 #define COMMANDLENGTH     10
 #define NUMCOMMANDS       5
@@ -10,19 +8,6 @@
 #define MOTORPERIOD       10000
 #define IDEAL             6000      // used for calculating error in the PID controller
 
-// UART handle
-UART_Handle uart;
-
-//ADC
-ADC_Handle adc0, adc1; // adc0 = right sensor
-
-//PWM
-PWM_Handle pwm0, pwm1; // pwm0 = left motor
-
-//clock stuff
-Timer_Handle timer0;
-
-uint32_t runTime;
 
 //PID stuff
 int left;
@@ -73,11 +58,11 @@ extern void runCommand(int);
 extern void fifo_init(Queue *a);
 extern int fifo_put(Queue *q, int *a);
 extern int fifo_get(Queue *q);
-extern void UARTInit();
-extern void GPIOInit();
-extern void ADCInit();
-extern void PWMInit();
-extern void peidiDC();
+extern void UARTInit(void);
+extern void GPIOInit(void);
+extern void ADCInit(void);
+extern void PWMInit(void);
+extern void peidiDC(void);
 extern void setDuty(int pwm, int period);
 extern void printTime(void);
 extern void BSP_Clock_InitFastest (void);

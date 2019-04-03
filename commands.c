@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "configurePin.h"
+#include "os.h"
 #include "commands.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,8 +24,8 @@ void commandsInit() {
     registerCommand(&spinr, "spinr");
 }
 
-void printSem() {//REWRITE
-    Semaphore_post(printSema);
+void printSem() {
+    OS_Signal(&printSema);
 }
 
 void red() {
@@ -38,7 +39,7 @@ void green() {
 void blue() {
     pinToggle(2,2);
 }
-
+/*//uncomment for later milestones
 void ADC() {
     int i = 0;
     char test[10];
@@ -95,4 +96,4 @@ void med() {
 void high() {
     setDuty(0, 10000);
     setDuty(1, 10000);
-}
+}*/

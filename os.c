@@ -5,11 +5,10 @@
 // February 20, 2016
 
 #include <stdint.h>
+#include "msp432p401r_classic.h"
 #include "os.h"
-#include "../inc/CortexM.h"
-#include "../inc/BSP.h"
-#include "../inc/msp432p401r.h"//for DIO registers in edge trigger fcn
-
+#include "utils.h"
+#include "CortexM.h"
 
 // function definitions in osasm.s
 void StartOS(void);
@@ -178,7 +177,7 @@ void OS_PeriodTrigger1_Init(int32_t *semaPt, uint32_t period) {
 // Errors: theTimeSlice must be less than 16,777,216
 void OS_Launch(uint32_t theTimeSlice){
   RunPt = &tcbs[0];
-	BSP_PeriodicTask_Init(runperiodicevents, 1000, 0);//start the periodic event spinner
+	//BSP_PeriodicTask_Init(runperiodicevents, 1000, 0);//start the periodic event spinner
   STCTRL = 0;                  // disable SysTick during setup
   STCURRENT = 0;               // any write to current clears it
   SYSPRI3 =(SYSPRI3&0x00FFFFFF)|0xE0000000; // priority 7
@@ -327,27 +326,3 @@ uint32_t OS_FIFO_Get(void){
 		return ret;
 }
 
-//trigger on pin 3.5
-void OS_EdgeTrigger_Init(int32_t *semaPt, uint8_t priority) {
-	buttonSig = semaPt;//this semaphore will be signalled by the DIO interrupt
-	P3DIR &= ~(0x20);//set pin to input
-	P3SEL0 &= ~(0x20);//set pin to general IO
-	P3SEL1 &= ~(0x20);
-	P3IES |= 0x20;//set pin to falling edge interrupt (negative logic)
-	P3IFG &= ~0x20;
-	P3IE |= 0x20;//enable interrupt on pin
-	NVIC_IPR9 |= (priority << 13);//set priority in NVIC
-	NVIC_ISER1 |= 0x20;//enable interrupt in NVIC
-}
-
-void PORT3_IRQHandler (void) {
-	OS_Signal(buttonSig);//signal the chosen semaphore
-	P3IFG &= ~0x20;
-	NVIC_ICER1 |= 0x20;//disable interrupt until EdgeTrigger_Restart is called
-	return;
-}
-
-void OS_EdgeTrigger_Restart (void) {
-	NVIC_ICPR1 |= 0x20;//clear any pending interrupts on the pin
-	NVIC_ISER1 |= 0x20;//re-enable pin interrupt
-}

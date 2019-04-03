@@ -64,7 +64,7 @@ inline enum PortLetterType NumToLetterPort(uint8_t portN, uint8_t* pinN) {
 void configurePinL(enum PortLetterType portL, uint8_t pinN, uint8_t afsel, enum DirectionType dir, enum InterruptEnableType interrupt) {
 	uint16_t* addr = portAddr(portL);
 	//direction reg is at +0x04
-	if (dir == IN) {
+	if (dir == _IN) {
 		*(addr+ 0x04) &= ~(0x1 << pinN);
 		//set PUR or PDR?
 	} else { //dir == OUT

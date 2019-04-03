@@ -1,8 +1,10 @@
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
-
+#include "os.h"
 #include "utils.h"
 #include "commands.h"
+#include "configurePin.h"
 
 
 /* BIOS Header files */
@@ -29,9 +31,9 @@ void fxn0() {
  * @param arg1 set in the config file, unused
  * @return void
  */
-void life(UArg arg0, UArg arg1) { // keep alive function
+void life() { // keep alive function
     while(1) {
-        Task_sleep(1);
+        OS_Sleep(1);
     }
 }
 
@@ -42,10 +44,10 @@ void life(UArg arg0, UArg arg1) { // keep alive function
  * @param arg1 set in config, unused
  * @return void
  */
-void heartbeat(UArg arg0, UArg arg1) {
+void heartbeat() {
     while (1) {
         pinToggle(1,0);
-        Task_sleep(arg0);
+        OS_Sleep(255);
     }
 }
 
@@ -72,7 +74,7 @@ void runCommands(void) {// run commands from queue
    * @param none
    * @return void
    */
-void bluetooth(UArg arg0, UArg arg1) {    // get commands from bluetooth UART
+void bluetooth() {    // get commands from bluetooth UART
     char        input;
     char        in[11];                   // 11 characters so a 10-character string can be null-terminated
     int i, temp;
@@ -96,7 +98,7 @@ void bluetooth(UArg arg0, UArg arg1) {    // get commands from bluetooth UART
         temp = resolveCommand(in);             // resolve command string to command number
         if (temp != -1) {                      // if it could be resolved, put it in command queue
             i = fifo_put(commandQueue, &temp);
-            Swi_post(commandsSWI);
+            runCommands();
             if(i == -1)
                 putString("FIFO full");   // prints command if the fifo is full
         } else {
@@ -106,23 +108,13 @@ void bluetooth(UArg arg0, UArg arg1) {    // get commands from bluetooth UART
     }
 }
 
-/**
- * HWI which posts a SWI to run our PID calculation
- *
- * @param none
- * @return none
- */
+/* uncomment for later milestones
+
 void peidiDC() {
     Swi_post(pidSWI);
 }
 
-/**
-   * SWI used to follow the wall,
-   * calculates the PWM value to send to the actuator using a PID calculation
-   *
-   * @param none
-   * @return void - calls the actuator function to set the PWM value before returning
-   */
+
 void calculatePid(void) {
     uint16_t R;             // right sensor
     uint16_t F;             // front sensor
@@ -169,13 +161,6 @@ void calculatePid(void) {
     }
 }
 
-/*
-  * Task which initializes a timer and a GPIO port to use for the light sensors
-  * and reads them to check for black lines.
-  *
-  * @param none
-  * @return none
-  */
 
 void LightSensor(void) {
     // 1.Configure GPIO pin as output
@@ -228,13 +213,7 @@ void LightSensor(void) {
     }
 }
 
-/*
-  * Task used to print the ping-pong queues,
-  * pends on a semaphore so it only prints when it needs to.
-  *
-  * @param none
-  * @return none
-  */
+
 void printQueues() {
     queueNum = 0;
     queueAddress[0] = 0;
@@ -258,3 +237,4 @@ void printQueues() {
         pinOn(2, 2);
     }
 }
+*/

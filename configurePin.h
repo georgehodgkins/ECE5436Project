@@ -1,7 +1,7 @@
 #ifndef CONFPIN_H_
 #define CONFPIN_H_
 
-enum DirectionType {IN, OUT};
+enum DirectionType {_IN, _OUT};
 enum InterruptEnableType {INTERRUPT_RISING, INTERRUPT_FALLING, NO_INTERRUPT};
 enum PortLetterType {A, B, C, D, E};
 
