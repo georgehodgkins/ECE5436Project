@@ -4,6 +4,9 @@ void GPIO_Init() {
   for(int i; i < 80; i++) {
     pins[i] = 0;
   }
+  pinMode(75, OUTPUT);
+  pinMode(76, OUTPUT);
+  pinMode(77, OUTPUT);
 }
 
 void pinOn(uint8_t pin) {

@@ -1,4 +1,7 @@
+#include "stdlib.h"
+
 void setupCommands() {
+  analogReadResolution(14);
   commandsInit();
 }
 
@@ -11,30 +14,22 @@ void loopCommands() {
 //}
 
 void red() {
-    //pinToggle(2,0);
+    pinToggle(75);
 }
 
 void green() {
-    //pinToggle(2,1);
+    pinToggle(76);
 }
 
 void blue() {
-    //pinToggle(2,2);
+    pinToggle(77);
 }
-/*
 
 void ADC() {
-    int i = 0;
-    char test[10];
-    while(1) {
-        uint16_t a = 0, b = 0;
-        ADC_convert(adc0, &a);
-        ADC_convert(adc1, &b);
-        sprintf(test, "%d\t%d\n\r", a, b);
-        putString(test);
-        for(i = 0; i < 1000000; i++){}
-    }
+  Serial1.println(analogRead(A3)); // right
+  Serial1.println(analogRead(A5)); // front
 }
+/*
 
 void reverse() {
     pinToggle(2, 4);
@@ -85,11 +80,10 @@ void high() {
 // Linked list to hold commands
 typedef struct commandListener { // command listener struct
     void (*func)(void); // pointer to command listener function
-    struct commandListener *next; // linked list structure
     String command; // command string
 } commandListener;
 
-commandListener *baseCommand;
+commandListener Commands[4];
 
 /**
  * Adds a command to our command list which is a linked list to allow for greater expandability
@@ -98,60 +92,31 @@ commandListener *baseCommand;
  * @param command - a string that contains the function name
  * @return void
  */
+int commandCount;
 void registerCommand(void (*function)(void), String command) {
-    int i = 0;
-    commandListener *current;
-    if(baseCommand != NULL) {
-        current = baseCommand;
-        while(current->next != NULL) {
-            i++;
-            current = current->next;
-        }
-        current->next = (commandListener *) malloc(sizeof(commandListener));
-        current = current->next;
-    } else {
-        baseCommand = (commandListener *) malloc(sizeof(commandListener));
-        current = baseCommand;
-    }
+    commandListener *current = &Commands[commandCount];
     current->func = function;
-    current->next = NULL;
-    i = 0;
     current->command = command;
+    commandCount++;
+    //Serial1.println(command);
 }
 
 /**
- * Cycles through out linked-list in an attempt to find the command requested
+ * Cycles through out linked-list in an attempt to find the command requested then runs the command
  *
  * @param command - a string with the command to be resolved
  * @return -1 - on unknown command
- * @return int - the command number to allow the command to be ran using that number
+ * @return int - the number of the command ran
  */
-int resolveCommand(String command) {
-    int i = 0;
-    commandListener *current = baseCommand;
-    while(current->command != command) {
-        if(current->next == NULL) {
-            return -1;
-        }
-        current = current->next;
-        i++;
+int runCommand(String command) {
+    int i = commandCount;
+    while(!Commands[i].command.equals(command) && i >= 0) {
+        i--;
+    }
+    if(i >= 0) {
+      Commands[i].func();
     }
     return i;
-}
-
-/**
- * A function to run the command requested
- *
- * @param a - the number of the command requested
- * @return void
- */
-void runCommand(int a) {
-    int i;
-    commandListener *current = baseCommand;
-    for(i = 0; i < a; i++) {
-        current = current->next;
-    }
-    current->func();
 }
 
 
@@ -160,12 +125,12 @@ void commandsInit() {
     // create and initialize command queue fifo
     //commandQueue = (Queue *) malloc(sizeof(Queue));
     //fifo_init(commandQueue);
-
-    //registerCommand(&red, "red");
-    //registerCommand(&green, "green");
+    commandCount = 0;
+    registerCommand(&red, "red");
+    registerCommand(&green, "green");
     registerCommand(&blue, "blue");
-    /*registerCommand(&ADC, "adc");
-    registerCommand(&start, "start");
+    registerCommand(&ADC, "adc");
+    /*registerCommand(&start, "start");
     registerCommand(&stop, "stop");
     registerCommand(&reverse, "reverse");
     registerCommand(&low, "low");

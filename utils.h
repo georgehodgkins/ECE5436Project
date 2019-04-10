@@ -59,7 +59,7 @@ extern int length(char*);
 //extern void putChar(char);
 //extern void putString(char*);
 //extern char getChar(void);
-extern void runCommand(int);
+//extern void runCommand(int);
 extern void fifo_init(Queue *a);
 extern int fifo_put(Queue *q, int *a);
 extern int fifo_get(Queue *q);

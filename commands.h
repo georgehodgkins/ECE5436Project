@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "String.h"
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
@@ -16,5 +17,6 @@ extern void low();
 extern void med();
 extern void high();
 extern void actuator(int);
+//extern int runCommand(String);
 
 #endif /* COMMANDS_H_ */
