@@ -29,6 +29,42 @@ void ADC() {
   Serial1.println(analogRead(A3)); // right
   Serial1.println(analogRead(A5)); // front
 }
+
+void forward() {
+  digitalWrite(34, LOW);
+  digitalWrite(36, LOW);
+}
+
+void backward() {
+  digitalWrite(34, HIGH);
+  digitalWrite(36, HIGH);
+}
+
+void spinl() {
+  digitalWrite(34, LOW);
+  digitalWrite(36, HIGH);
+}
+
+void spinr() {
+  digitalWrite(34, HIGH);
+  digitalWrite(36, LOW);
+}
+
+void full() {
+  analogWrite(35, 255);
+  analogWrite(37, 255);
+}
+
+void half() {
+  analogWrite(35, 128);
+  analogWrite(37, 128);
+}
+
+void stopp() {
+  analogWrite(35, 0);
+  analogWrite(37, 0);
+}
+
 /*
 
 void reverse() {
@@ -83,7 +119,7 @@ typedef struct commandListener { // command listener struct
     String command; // command string
 } commandListener;
 
-commandListener Commands[4];
+commandListener Commands[11];
 
 /**
  * Adds a command to our command list which is a linked list to allow for greater expandability
@@ -130,6 +166,13 @@ void commandsInit() {
     registerCommand(&green, "green");
     registerCommand(&blue, "blue");
     registerCommand(&ADC, "adc");
+    registerCommand(&forward, "go");
+    registerCommand(&backward, "back");
+    registerCommand(&spinl, "spinl");
+    registerCommand(&spinr, "spinr");
+    registerCommand(&full, "full");
+    registerCommand(&half, "half");
+    registerCommand(&stopp, "stop");
     /*registerCommand(&start, "start");
     registerCommand(&stop, "stop");
     registerCommand(&reverse, "reverse");

@@ -7,6 +7,10 @@ void GPIO_Init() {
   pinMode(75, OUTPUT);
   pinMode(76, OUTPUT);
   pinMode(77, OUTPUT);
+  pinMode(34, OUTPUT); // right motor direction, LOW = forward HIGH = backwards
+  pinMode(35, OUTPUT); // right motor PWM
+  pinMode(36, OUTPUT); // left motor direction, LOW = forward HIGH = backwards
+  pinMode(37, OUTPUT); // left motor PWM
 }
 
 void pinOn(uint8_t pin) {
