@@ -178,7 +178,7 @@ int length(char *a) {
    * @param pwmIncrement - comes from the PID calculation.
    * @return void - calls the actuator function to set the PWM value before returning
    */
-/*void actuator(int pwmIncrement) {
+void actuator(int pwmIncrement) {
     if(pwmIncrement < 0) {
         if(left < 10000) {  //
             left -= pwmIncrement;
@@ -200,7 +200,7 @@ int length(char *a) {
     if(left > 10000) left = 10000;
     setDuty(0, left);
     setDuty(1, right);
-}*/
+}
 
 /**
    * Sets the duty cycle
@@ -209,8 +209,7 @@ int length(char *a) {
    * @param duty - PWM value to be set to the actuators
    * @return void - calls the actuator function to set the PWM value before returning
    */
-/*void setDuty(int num, int duty) {
-  //REWRITE
+void setDuty(int num, int duty) {
     if (duty > MOTORPERIOD) {
         duty = MOTORPERIOD;
     } else if (duty < -MOTORPERIOD) {
@@ -233,7 +232,7 @@ int length(char *a) {
             PWM_setDuty(pwm1, duty);
         }
     }
-}*/
+}
 
 /**
  * Prints the amount of time the system ran in the format minutes:seconds.milliseconds

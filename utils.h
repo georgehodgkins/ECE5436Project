@@ -67,7 +67,6 @@ extern int fifo_get(Queue *q);
 extern void GPIOInit();
 extern void ADCInit();
 extern void PWMInit();
-extern void peidiDC();
 extern void setDuty(int pwm, int period);
 extern void printTime(void);
 extern void BSP_Clock_InitFastest (void);*/
