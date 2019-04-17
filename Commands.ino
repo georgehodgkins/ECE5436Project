@@ -3,6 +3,8 @@
 void setupCommands() {
   analogReadResolution(14);
   commandsInit();
+  left = 255;
+  right = 255;
 }
 
 void loopCommands() {
@@ -51,67 +53,25 @@ void spinr() {
 }
 
 void full() {
-  analogWrite(35, 255);
-  analogWrite(37, 255);
+  analogWrite(35, 16383);
+  analogWrite(37, 16383);
 }
 
 void half() {
-  analogWrite(35, 128);
-  analogWrite(37, 128);
+  analogWrite(35, 16383/2);
+  analogWrite(37, 16383/2);
 }
 
 void stopp() {
   analogWrite(35, 0);
   analogWrite(37, 0);
 }
-
-/*
-
-void reverse() {
-    pinToggle(2, 4);
-    pinToggle(5, 6);
-}
-
-void spinl() {
-    pinToggle(2, 4);
-    //pinToggle(5, 6);
-}
-
-void spinr() {
-    //pinToggle(2, 4);
-    pinToggle(5, 6);
-}
-
 void start() {
     setDuty(0, left);
     setDuty(1, right);
     runTime = 0;
-  //rewrite
-    Timer_start(PIDTimer);
+    timer0.start();
 }
-
-void stop() {
-  //rewrite
-    Timer_stop(PIDTimer);
-    setDuty(0, 0);
-    setDuty(1, 0);
-}
-
-void low() {
-    setDuty(0, 2500);
-    setDuty(1, 2500);
-}
-
-void med() {
-    setDuty(0, 5000);
-    setDuty(1, 5000);
-}
-
-void high() {
-    setDuty(0, 10000);
-    setDuty(1, 10000);
-}*/
-
 
 // Linked list to hold commands
 typedef struct commandListener { // command listener struct
@@ -173,12 +133,5 @@ void commandsInit() {
     registerCommand(&full, "full");
     registerCommand(&half, "half");
     registerCommand(&stopp, "stop");
-    /*registerCommand(&start, "start");
-    registerCommand(&stop, "stop");
-    registerCommand(&reverse, "reverse");
-    registerCommand(&low, "low");
-    registerCommand(&med, "med");
-    registerCommand(&high, "high");
-    registerCommand(&spinl, "spinl");
-    registerCommand(&spinr, "spinr");*/
+    registerCommand(&start, "start");
 }
