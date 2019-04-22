@@ -15,12 +15,14 @@
 boolean stringComplete;
 uint8_t len;
 String str;
+int constant;
 
 void setupBluetooth() {
   Serial1.begin(115200);
   stringComplete = 0;
   len = 0;
   str = "";
+  constant = 0;
 }
 
 
@@ -57,8 +59,34 @@ void loopBluetooth() {
     if (temp != -1) {
       
     } else {
-      Serial1.print("Unknown Command");
-      Serial1.print("\n\r");
+      if(str.equals("kp")) {
+        constant = 1;
+      } else if(str.equals("kd")) {
+        constant = 2;
+      } else if(str.equals("ki")) {
+        constant = 3;
+      } else if(constant != 0) {
+        temp = str.toInt();
+        switch(constant) {
+         case 1:
+          kp = temp;
+          Serial1.println(kp);
+          break;
+         case 2:
+          kd = temp * 10;
+          Serial1.println(kd);
+          break;
+         case 3:
+          ki = temp;
+          Serial1.println(ki);
+          break;
+         default:
+          break;
+        }
+      } else {
+        Serial1.print("Unknown Command");
+        Serial1.print("\n\r");
+      }
     }
     stringComplete = 0;
     len = 0;

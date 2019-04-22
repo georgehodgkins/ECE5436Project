@@ -179,25 +179,26 @@ int length(char *a) {
    * @return void - calls the actuator function to set the PWM value before returning
    */
 void actuator(int pwmIncrement) {
+    pwmIncrement = pwmIncrement * 255 / 10000;
     if(pwmIncrement < 0) {
-        if(left < 10000) {  //
+        if(left < MOTORPERIOD) {  //
             left -= pwmIncrement;
-            right = 10000;
+            right = MOTORPERIOD;
         } else {
             right += pwmIncrement;
         }
     } else if(pwmIncrement > 0) {
-        if(right < 10000) {
+        if(right < MOTORPERIOD) {
             right += pwmIncrement;
-            left = 10000;
+            left = MOTORPERIOD;
         } else {
             left -= pwmIncrement;
         }
     }
-    if(right < 2000) right = 2000;
-    if(right > 10000) right = 10000;
-    if(left < 2000) left = 2000;
-    if(left > 10000) left = 10000;
+    if(right < 100) right = 100;
+    if(right > MOTORPERIOD) right = MOTORPERIOD;
+    if(left < 100) left = 100;
+    if(left > MOTORPERIOD) left = MOTORPERIOD;
     setDuty(0, left);
     setDuty(1, right);
 }
@@ -217,19 +218,19 @@ void setDuty(int num, int duty) {
     }
     if (num == 0) {
         if (duty < 0) {
-            pinOff(2, 4);
-            PWM_setDuty(pwm0, -duty);
+            pinOn(LEFTDIR);
+            analogWrite(LEFTPWM, -duty);
         } else {
-            pinOn(2, 4);
-            PWM_setDuty(pwm0, duty);
+            pinOff(LEFTDIR);
+            analogWrite(LEFTPWM, duty);
         }
     } else if (num == 1) {
         if (duty < 0) {
-            pinOff(5, 6);
-            PWM_setDuty(pwm1, -duty);
+            pinOn(RIGHTDIR);
+            analogWrite(RIGHTPWM, -duty);
         } else {
-            pinOn(5, 6);
-            PWM_setDuty(pwm1, duty);
+            pinOff(RIGHTDIR);
+            analogWrite(RIGHTPWM, duty);
         }
     }
 }
@@ -240,16 +241,19 @@ void setDuty(int num, int duty) {
  * @param none
  * @return none - outputs on UART terminal
  */
-/*void printTime(void) {
+void printTime(void) {
     uint32_t minutes;
     uint32_t seconds;
     uint32_t milliSeconds;
     char a[15];
-    milliSeconds = runTime * 50;
+    milliSeconds = runTime * 25;
     seconds = milliSeconds / 1000;
     milliSeconds -= seconds * 1000;
     minutes = seconds / 60;
     seconds -= minutes * 60;
-    sprintf(a, "%lu:%lu.%lu\n\r", minutes, seconds, milliSeconds);
-    putString(a);
-}*/
+    Serial1.print(minutes);
+    Serial1.print(":");
+    Serial1.print(seconds);
+    Serial1.print(".");
+    Serial1.println(milliSeconds);
+}

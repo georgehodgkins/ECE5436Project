@@ -8,8 +8,12 @@
 #define COMMANDLENGTH     10
 #define NUMCOMMANDS       5
 #define FIFOSIZE          10
-#define MOTORPERIOD       10000
+#define MOTORPERIOD       255
 #define IDEAL             6000      // used for calculating error in the PID controller
+#define RIGHTDIR          34
+#define RIGHTPWM          35
+#define LEFTDIR           36
+#define LEFTPWM           37
 
 // UART handle
 //UART_Handle uart;
@@ -22,6 +26,7 @@
 
 //clock stuff
 //Timer_Handle timer0;
+Timer timer0;
 
 uint32_t runTime;
 
@@ -30,6 +35,7 @@ int left;
 int right;
 int P;
 int I;
+int D;
 int lastE;
 int kp;
 int kd;
@@ -38,6 +44,7 @@ int print;
 int front;
 int lF;
 uint8_t two;
+boolean finished;
 
 //ping-pong queues
 uint8_t queueNum;
@@ -67,6 +74,7 @@ extern int fifo_get(Queue *q);
 extern void GPIOInit();
 extern void ADCInit();
 extern void PWMInit();
+extern void peidiDC();
 extern void setDuty(int pwm, int period);
 extern void printTime(void);
 extern void BSP_Clock_InitFastest (void);*/
