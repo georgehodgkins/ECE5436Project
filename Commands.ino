@@ -1,125 +1,161 @@
 #include "stdlib.h"
 
+/**
+ * Setup command handler
+ *
+ * @param none
+ * @return none
+ */
 void setupCommands() {
-  analogReadResolution(14);
   commandsInit();
+  left = 255;
+  right = 255;
 }
 
 void loopCommands() {
-  
+  // Empty loop to please Energia sun the setup function. Loop never got used.
 }
 
-//void printSem() {//REWRITE
-    //Semaphore_post(printSema);
-//}
-
+/**
+ * toggle onboard RGB LED's Red filament
+ *
+ * @param none
+ * @return none
+ */
 void red() {
     pinToggle(75);
 }
 
+/**
+ * toggle onboard RGB LED's Green filament
+ *
+ * @param none
+ * @return none
+ */
 void green() {
     pinToggle(76);
 }
 
+/**
+ * toggle onboard RGB LED's Blue filament
+ *
+ * @param none
+ * @return none
+ */
 void blue() {
     pinToggle(77);
 }
 
+/**
+ * Take one reading from each ADC
+ *
+ * @param none
+ * @return none
+ */
 void ADC() {
   Serial1.println(analogRead(A3)); // right
   Serial1.println(analogRead(A5)); // front
 }
 
+/**
+ * Set motors to go forward
+ *
+ * @param none
+ * @return none
+ */
 void forward() {
   digitalWrite(34, LOW);
   digitalWrite(36, LOW);
 }
 
+/**
+ * Set motors to go backwards
+ *
+ * @param none
+ * @return none
+ */
 void backward() {
   digitalWrite(34, HIGH);
   digitalWrite(36, HIGH);
 }
 
+/**
+ * Set motors to spin left
+ *
+ * @param none
+ * @return none
+ */
 void spinl() {
   digitalWrite(34, LOW);
   digitalWrite(36, HIGH);
 }
 
+/**
+ * Set motors to spin right
+ *
+ * @param none
+ * @return none
+ */
 void spinr() {
   digitalWrite(34, HIGH);
   digitalWrite(36, LOW);
 }
 
+/**
+ * Set PWM power to full
+ *
+ * @param none
+ * @return none
+ */
 void full() {
   analogWrite(35, 255);
   analogWrite(37, 255);
 }
 
+/**
+ * Set PWM power to half
+ *
+ * @param none
+ * @return none
+ */
 void half() {
   analogWrite(35, 128);
   analogWrite(37, 128);
 }
 
+/**
+ * Set PWM power to 0
+ *
+ * @param none
+ * @return none
+ */
 void stopp() {
   analogWrite(35, 0);
   analogWrite(37, 0);
 }
 
-/*
-
-void reverse() {
-    pinToggle(2, 4);
-    pinToggle(5, 6);
-}
-
-void spinl() {
-    pinToggle(2, 4);
-    //pinToggle(5, 6);
-}
-
-void spinr() {
-    //pinToggle(2, 4);
-    pinToggle(5, 6);
-}
-
+/**
+ * Start the maze-solving algorithm
+ *
+ * @param none
+ * @return none
+ */
 void start() {
     setDuty(0, left);
     setDuty(1, right);
     runTime = 0;
-  //rewrite
-    Timer_start(PIDTimer);
+    timer0.start();
+    finished = 0;
 }
 
-void stop() {
-  //rewrite
-    Timer_stop(PIDTimer);
-    setDuty(0, 0);
-    setDuty(1, 0);
-}
-
-void low() {
-    setDuty(0, 2500);
-    setDuty(1, 2500);
-}
-
-void med() {
-    setDuty(0, 5000);
-    setDuty(1, 5000);
-}
-
-void high() {
-    setDuty(0, 10000);
-    setDuty(1, 10000);
-}*/
-
-
-// Linked list to hold commands
+// Struct to hold commands
 typedef struct commandListener { // command listener struct
     void (*func)(void); // pointer to command listener function
     String command; // command string
 } commandListener;
 
-commandListener Commands[11];
+// Array of structs of commands
+commandListener Commands[12];
 
 /**
  * Adds a command to our command list which is a linked list to allow for greater expandability
@@ -156,7 +192,7 @@ int runCommand(String command) {
 }
 
 
-
+// Initialize the commands we are using.
 void commandsInit() {
     // create and initialize command queue fifo
     //commandQueue = (Queue *) malloc(sizeof(Queue));
@@ -173,12 +209,5 @@ void commandsInit() {
     registerCommand(&full, "full");
     registerCommand(&half, "half");
     registerCommand(&stopp, "stop");
-    /*registerCommand(&start, "start");
-    registerCommand(&stop, "stop");
-    registerCommand(&reverse, "reverse");
-    registerCommand(&low, "low");
-    registerCommand(&med, "med");
-    registerCommand(&high, "high");
-    registerCommand(&spinl, "spinl");
-    registerCommand(&spinr, "spinr");*/
+    registerCommand(&start, "start");
 }
