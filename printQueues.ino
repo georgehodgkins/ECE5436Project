@@ -2,6 +2,11 @@
 
 Semaphore printSema;
 
+/** 
+ * Initialize the print queues
+ * 
+ * @returns void
+ **/
 void setupPrintQueues() {
     queueNum = 0;
     queueAddress[0] = 0;
@@ -9,6 +14,11 @@ void setupPrintQueues() {
     printSema.begin(0);
 }
 
+/** 
+ * Print the queues, hangs on the printSema semaphore
+ * 
+ * @returns void
+ **/
 void loopPrintQueues() {
     uint8_t temp;
     int i;
