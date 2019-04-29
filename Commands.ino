@@ -53,13 +53,13 @@ void spinr() {
 }
 
 void full() {
-  analogWrite(35, 16383);
-  analogWrite(37, 16383);
+  analogWrite(35, 255);
+  analogWrite(37, 255);
 }
 
 void half() {
-  analogWrite(35, 16383/2);
-  analogWrite(37, 16383/2);
+  analogWrite(35, 128);
+  analogWrite(37, 128);
 }
 
 void stopp() {
@@ -71,6 +71,7 @@ void start() {
     setDuty(1, right);
     runTime = 0;
     timer0.start();
+    finished = 0;
 }
 
 // Linked list to hold commands
@@ -79,7 +80,7 @@ typedef struct commandListener { // command listener struct
     String command; // command string
 } commandListener;
 
-commandListener Commands[11];
+commandListener Commands[12];
 
 /**
  * Adds a command to our command list which is a linked list to allow for greater expandability

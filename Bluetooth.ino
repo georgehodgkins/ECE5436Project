@@ -12,18 +12,31 @@
 #include "utils.h"
 #include "commands.h"
 
-boolean stringComplete;
-uint8_t len;
-String str;
+boolean stringComplete; //set when the user presses return
+uint8_t len; //length of read string
+String str; //string read from UART input
+int constant; //designates the PID constant to be modified by the next input (0=none, 1=kP, 2=kD, 3 = kI)
 
+/*
+ * Setup for UART communication with the Bluetooth card, initializing globals
+ * 
+ * @param none
+ * @return void
+ */
 void setupBluetooth() {
   Serial1.begin(115200);
   stringComplete = 0;
   len = 0;
   str = "";
+  constant = 0;
 }
 
-
+/*
+ * Main Bluetooth "thread" that gets run periodically to read commands from the UART and process them
+ * 
+ * @param none
+ * @return void
+ */
 void loopBluetooth() {
   char input;
   int temp;
@@ -57,8 +70,34 @@ void loopBluetooth() {
     if (temp != -1) {
       
     } else {
-      Serial1.print("Unknown Command");
-      Serial1.print("\n\r");
+      if(str.equals("kp")) {
+        constant = 1;
+      } else if(str.equals("kd")) {
+        constant = 2;
+      } else if(str.equals("ki")) {
+        constant = 3;
+      } else if(constant != 0) {
+        temp = str.toInt();
+        switch(constant) {
+         case 1:
+          kp = temp;
+          Serial1.println(kp);
+          break;
+         case 2:
+          kd = temp * 10;
+          Serial1.println(kd);
+          break;
+         case 3:
+          ki = temp;
+          Serial1.println(ki);
+          break;
+         default:
+          break;
+        }
+      } else {
+        Serial1.print("Unknown Command");
+        Serial1.print("\n\r");
+      }
     }
     stringComplete = 0;
     len = 0;

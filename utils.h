@@ -44,6 +44,7 @@ int print;
 int front;
 int lF;
 uint8_t two;
+boolean finished;
 
 //ping-pong queues
 uint8_t queueNum;

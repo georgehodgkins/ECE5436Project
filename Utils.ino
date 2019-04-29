@@ -195,9 +195,9 @@ void actuator(int pwmIncrement) {
             left -= pwmIncrement;
         }
     }
-    if(right < 51) right = 51;
+    if(right < 100) right = 100;
     if(right > MOTORPERIOD) right = MOTORPERIOD;
-    if(left < 51) left = 51;
+    if(left < 100) left = 100;
     if(left > MOTORPERIOD) left = MOTORPERIOD;
     setDuty(0, left);
     setDuty(1, right);
@@ -241,16 +241,19 @@ void setDuty(int num, int duty) {
  * @param none
  * @return none - outputs on UART terminal
  */
-/*void printTime(void) {
+void printTime(void) {
     uint32_t minutes;
     uint32_t seconds;
     uint32_t milliSeconds;
     char a[15];
-    milliSeconds = runTime * 50;
+    milliSeconds = runTime * 25;
     seconds = milliSeconds / 1000;
     milliSeconds -= seconds * 1000;
     minutes = seconds / 60;
     seconds -= minutes * 60;
-    sprintf(a, "%lu:%lu.%lu\n\r", minutes, seconds, milliSeconds);
-    putString(a);
-}*/
+    Serial1.print(minutes);
+    Serial1.print(":");
+    Serial1.print(seconds);
+    Serial1.print(".");
+    Serial1.println(milliSeconds);
+}
