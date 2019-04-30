@@ -1,5 +1,3 @@
-boolean statusRed;
-
 /*
  * Setup function to initialize the heartbeat LED
  * 
@@ -8,7 +6,6 @@ boolean statusRed;
  */
 void setupHeartBeat() {
   pinMode(78, OUTPUT);
-  statusRed = 0;
 }
 
 /*

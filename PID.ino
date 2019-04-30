@@ -16,7 +16,7 @@ int last;//tracks the last result of the line detection (0=line, 1=no line)
  *
  */
 void setupPeriodic () {
-  timer0.begin(pwmEvent, 12500);
+  timer0.begin(pwmEvent, 12500); // 12.5 ms
   //timer0.start();
   front = 12000;
   kp = 500;                  // gain value P
@@ -33,7 +33,7 @@ boolean period;
 
 /*
  * Periodic event called by the timer set up in setupPeriodic(),
- * calls LightSensor() every 25 ms and calculatePid() every 50 ms
+ * calls LightSensor() every 12.5 ms and calculatePid() every 25 ms
  * 
  * @param none
  * @return void

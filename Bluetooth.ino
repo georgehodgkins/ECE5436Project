@@ -10,7 +10,6 @@
 #include <Timer.h>
 
 #include "utils.h"
-#include "commands.h"
 
 boolean stringComplete; //set when the user presses return
 uint8_t len; //length of read string
